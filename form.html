@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page Kuesioner</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+    <script>
+      window.onbeforeunload = function () {
+        return "Data yang Anda isi bisa hilang jika kembali ke halaman sebelumnya.";
+      };
+
+      // pas user klik tombol 'Berikutnya' di bagian terakhir
+      document.getElementById('khususs').addEventListener('click', function () {
+        submitJawaban();
+      });
+    </script>
+  </head>
+
+  <script>
+    async function submitJawaban() {
+      // Ambil semua jawaban form
+      const q01 = [...document.querySelectorAll('input[name="q01"]:checked')].map(cb => cb.value);
+      const q02 = document.querySelector('input[name="q02"]:checked')?.value;
+      const q03 = document.querySelector('input[name="q03"]:checked')?.value;
+      const q04 = document.querySelector('input[name="q04"]:checked')?.value;
+      const q05 = document.querySelector('input[name="q05"]:checked')?.value;
+      const q06 = document.querySelector('.E6 input')?.value;
+
+      const { data, error } = await supabase
+        .from('jawaban_form')
+        .insert([{
+          q01: q01,
+          q02: parseInt(q02),
+          q03: parseInt(q03),
+          q04: parseInt(q04),
+          q05: parseInt(q05),
+          q06: q06
+        }]);
+
+      if (error) {
+        alert('Gagal menyimpan: ' + error.message);
+      } else {
+        alert('Jawaban berhasil disimpan. Terima kasih! 😄');
+      }
+    }
+  </script>
+
+
+  <body class="form-page"></body>
+
+
+    <header class="header">
+      <div class="logo">Argya Ardharatu</div>
+      <H4>Kuesioner Penelitian Skripsi 2025</H4>
+      <nav class="nav">
+        <a href="#bantuan">Bantuan</a>
+      </nav>
+      <div id="bantuanModal" class="modal">
+        <div class="modal-content modal-bantuan">
+            <span class="close" id="closeBantuan">&times;</span>
+            <h3>Bantuan</h3>
+            <br>
+            <div class="bajuku">
+              <p>Jika Anda mengalami kesulitan dalam mengisi survei ini, berikut beberapa bantuan yang bisa Anda gunakan:</p>
+              <ul class="poinnya">
+                <li>Gunakan tombol <strong>perbesar teks</strong> untuk membantu membaca jika huruf terlihat terlalu kecil.</li>
+                <li>Survei dapat diisi dalam waktu sekitar <strong>10 menit</strong>. Jawablah dengan santai dan jujur.</li>
+                <li>Jika terjadi error atau halaman tidak bergerak, silakan <strong>muat ulang (refresh)</strong> halaman Anda.</li>
+                <li>Pastikan Anda menggunakan browser yang disarankan seperti <strong>Chrome, Firefox, atau Edge</strong>.</li>
+                <li>Semua jawaban Anda <strong>bersifat rahasia</strong> dan hanya digunakan untuk keperluan penelitian ini.</li>
+                <li>Jika Anda membutuhkan bantuan lebih lanjut, silakan hubungi kami di <strong>email@domain.com</strong>.</li>
+              </ul>
+            </div>
+            <button id="closeBantuanBtn">Tutup</button>
+        </div>
+      </div>
+    </header>
+
+
+
+    <div class="form-section" id="section1">
+      <div class="kayatai">
+        <h2>Tingkat Kesejahteraan Ekonomi</h2>
+      </div>
+
+      <div class="bunglon">
+        <h4>Bagian ini bertujuan untuk memperoleh gambaran mengenai keadaan ekonomi Anda saat ini. Informasi yang Anda berikan akan sangat berharga untuk memahami faktor ekonomi yang dapat mempengaruhi kesiapan Anda dalam menjalani kehidupan di masa depan.</h3>
+      </div>
+    
+      <div class="font-size-controls">
+        <button class="normal" onclick="setFontSize('normal')">A</button>
+        <button class="besar" onclick="setFontSize('large')">A</button>
+        <button class="lebihbesar" onclick="setFontSize('xlarge')">A</button>
+      </div>
+
+      <form class="E1">
+        <div class="from-comp">
+          <label for="Q01">1. Apa saja yang Anda miliki saat ini?</label>
+          <br>
+          <br>
+          <div class="answer-area">
+            <input type="checkbox" id="Q01a" name="q01" value="1">
+            <label for="Q01a">Tidak memiliki investasi apa pun</label>
+          </div>
+          <div class="answer-area">
+            <input type="checkbox" id="Q01b" name="q01" value="2">
+            <label for="Q01b">Tanah dan/atau Bangunan</label>
+          </div>
+          <div class="answer-area">
+            <input type="checkbox" id="Q01c" name="q01" value="3">
+            <label for="Q01c">Kendaraan Pribadi</label>
+          </div>
+          <div class="answer-area">
+            <input type="checkbox" id="Q01d" name="q01" value="4">
+            <label for="Q01d">Tabungan Pribadi</label>
+          </div>
+          <div class="answer-area">
+            <input type="checkbox" id="Q01e" name="q01" value="5">
+            <label for="Q01e">Saham</label>
+          </div>
+        </div>
+      </form>
+
+      <script>
+        let selectedFont = null;
+      
+        document.querySelectorAll('#myForm button').forEach(button => {
+          button.addEventListener('click', async function () {
+            selectedFont = parseInt(this.value);
+      
+            const { data, error } = await supabase
+              .from('jawaban_form')
+              .insert([{ font_size: selectedFont }]);
+      
+            if (error) {
+              alert('Gagal menyimpan: ' + error.message);
+            } else {
+              alert('Tersimpan! Terima kasih 😄');
+            }
+          });
+        });
+      </script>
+      
+      <br>
+    
+      <form class="E2">
+        <div class="form-comp">
+          <label for="Q02">2. Berapa rata-rata penghasilan Anda dalam satu bulan?</label>
+          <br>
+          <br>
+          <input type="radio" id="Q02a" name="q02" value="1" required>
+          <label for="Q02a">Tidak berpenghasilan</label>
+          <br>
+          <input type="radio" id="Q02b" name="q02" value="2" required>
+          <label for="Q02b">Tidak cukup untuk memenuhi kebutuhan primer</label>
+          <br>
+          <input type="radio" id="Q02c" name="q02" value="3" required>
+          <label for="Q02c">Cukup untuk memenuhi kebutuhan primer</label>
+          <br>
+          <input type="radio" id="Q02d" name="q02" value="4" required>
+          <label for="Q02d">Cukup untuk memenuhi kebutuhan primer dan sekunder</label>
+          <br>
+          <input type="radio" id="Q02e" name="q02" value="5" required>
+          <label for="Q02e">Cukup untuk memenuhi kebutuhan primer, sekunder, dan tersier</label>
+        </div>
+      </form>
+
+      <br>
+
+      <form class="E3">
+        <label for="Q03">3. Saya masih memiliki tanggungan pembayaran yang masih berjalan baik atas nama pribadi maupun keluarga (Contoh tanggungan pembayaran: cicilan rumah, kendaraan, pinjaman, dan hal-hal serupa)</label>
+        <br>
+        <br>
+        <input type="radio" id="Q03a" name="q03" value="1" required>
+        <label for="Q03a">Sangat setuju</label>
+        <br>
+        <input type="radio" id="Q03b" name="q03" value="2" required>
+        <label for="Q03b">Setuju</label>
+        <br>
+        <input type="radio" id="Q03c" name="q03" value="3" required>
+        <label for="Q03c">Netral</label>
+        <br>
+        <input type="radio" id="Q03d" name="q03" value="4" required>
+        <label for="Q03d">Tidak setuju</label>
+        <br>
+        <input type="radio" id="Q03e" name="q03" value="5" required>
+        <label for="Q03e">Sangat tidak setuju</label>
+      </form>
+
+      <br>
+
+      <form class="E4">
+        <label for="Q04">4. Bila bekerja, Apa jenis pekerjaan Anda saat ini?</label>
+        <br>
+        <br>
+        <input type="radio" id="Q04a" name="q04" value="1" required>
+        <label for="Q04a">Tidak bekerja</label>
+        <br>
+        <input type="radio" id="Q04b" name="q04" value="2" required>
+        <label for="Q04b">Sektor informal</label>
+        <br>
+        <input type="radio" id="Q04c" name="q04" value="3" required>
+        <label for="Q04c">Sektor formal</label>
+      </form>
+
+      <br>
+
+      <form class="E5">
+        <label for="Q05">5. Apakah dalam pekerjaan yang ada lakukan saat ini memiliki program pensiun?</label>
+        <br>
+        <br>
+        <input type="radio" id="Q05a" name="q05" value="1" required>
+        <label for="Q05a">Tidak bekerja</label>
+        <br>
+        <input type="radio" id="Q05b" name="q05" value="2" required>
+        <label for="Q05b">Tidak tahu/Tidak ada</label>
+        <br>
+        <input type="radio" id="Q05c" name="q05" value="3" required>
+        <label for="Q05c">Ya, ada</label>
+      </form>
+
+      <br>
+
+      <form class="E6">
+        <label for="Q06">6. Bila ada,<br>
+          Pada umur berapa progam tersebut dilakukan?
+          Layanan apa saja yang didapatkan dari program tersebut</label>
+        <input type="text" name="q06">
+      </form>
+
+      <button class="next-button" id="khususs" data-next="section2">Berikutnya</button>
+
+    </div>
+
+    <div class="form-section" id="section2" style="display: none;">
+      <div class="kayatai">
+        <h2>Tingkat Kesehatan</h2>
+      </div>
+
+      <div class="bunglon">
+        <h4>Bagian ini bertujuan untuk memperoleh gambaran mengenai keadaan ekonomi Anda saat ini. Informasi yang Anda berikan akan sangat berharga untuk memahami faktor ekonomi yang dapat mempengaruhi kesiapan Anda dalam menjalani kehidupan di masa depan.</h3>
+      </div>
+
+      <div class="font-size-controls">
+        <button class="normal" onclick="setFontSize('normal')">A</button>
+        <button class="besar" onclick="setFontSize('large')">A</button>
+        <button class="lebihbesar" onclick="setFontSize('xlarge')">A</button>
+      </div>
+
+      <form class="SB7">
+        <label for="Q06">Bila ada,<br>MAAF YA CHAT GPT, W STRESS BANGET BYE</label>
+        <input type="text">
+      </form>
+
+      <div class="button-container">
+      <button class="prev-button" data-prev="section1">&lt;</button>
+      <button class="next-button" data-next="section3">Berikutnya</button>
+      </div>
+    </div>
+
+    <footer class="footer" id="ftnyaform">
+      <p>Pengaruh Faktor Ekonomi, Sosial Budaya, Kesehatan, Pendidikan, dan Dukungan Pemerintah <br>terhadap Kesadaran dan Kesiapan Pra-Lansia dalam Healthy Ageing</p>
+      <br>
+      <p>© 2025 Argya Ardharatu | Penelitian Skripsi</p> <br>
+    </footer>
+
+
+    <script>
+      function setFontSize(level) {
+        const root = document.documentElement;
+        if (level === 'normal') {
+          root.style.fontSize = '16px';
+        } else if (level === 'large') {
+          root.style.fontSize = '17px';
+        } else if (level === 'xlarge') {
+          root.style.fontSize = '18px';
+        }
+      }
+    </script>
+
+
+    <script>
+      const nextButtons = document.querySelectorAll('.next-button');
+      nextButtons.forEach(button => {
+        button.addEventListener('click', function () {
+          const currentSection = this.closest('.form-section');
+          const nextSectionId = this.getAttribute('data-next');
+          const nextSection = document.getElementById(nextSectionId);
+
+          currentSection.style.display = 'none';
+          nextSection.style.display = 'block';
+          window.scrollTo(0, 0); // auto scroll ke atas halaman
+        });
+      });
+      document.querySelectorAll('.prev-button').forEach(button => {
+        button.addEventListener('click', function() {
+          const prevSectionId = this.getAttribute('data-prev');
+          document.querySelectorAll('.form-section').forEach(sec => sec.style.display = 'none');
+          document.getElementById(prevSectionId).style.display = 'block';
+        });
+      });
+    </script>
+
+    <script>
+          // Menangani modal Bantuan
+      var bantuanModal = document.getElementById("bantuanModal");
+      var bantuanBtn = document.querySelector("a[href='#bantuan']"); // Mencari link Bantuan di navbar
+      var closeBantuan = document.getElementById("closeBantuan");
+      var closeBantuanBtn = document.getElementById("closeBantuanBtn");
+
+      // Saat link Bantuan diklik, tampilkan modal
+      bantuanBtn.onclick = function(event) {
+          event.preventDefault(); // Menghindari default behavior link
+          bantuanModal.style.display = "block";
+      }
+
+      // Saat tombol close atau closeBtn diklik, tutup modal
+      closeBantuan.onclick = function() {
+          bantuanModal.style.display = "none";
+      }
+
+      closeBantuanBtn.onclick = function() {
+          bantuanModal.style.display = "none";
+      }
+
+      // Menutup modal jika user klik di luar modal
+      window.onclick = function(event) {
+          if (event.target == bantuanModal) {
+              bantuanModal.style.display = "none";
+          }
+      }
+    </script>
+    
+
+  </body>
+</html>
